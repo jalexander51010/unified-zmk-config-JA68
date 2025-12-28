@@ -1,0 +1,6 @@
+if SHIELD_JA68
+
+config ZMK_KEYBOARD_NAME
+    default "JA68"
+
+endif
