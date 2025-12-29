@@ -16,7 +16,7 @@
      * KEEP THIS CONSISTENT WITH YOUR CURRENT WORKING STATE.
      * If most keys currently scan (even if mapped wrong), do NOT flip this.
      */
-    diode-direction = "col2row";
+    diode-direction = "row2col";
 
     /* ROWS (your horizontal row buses) */
     row-gpios = <
