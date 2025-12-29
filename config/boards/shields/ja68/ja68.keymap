@@ -2,67 +2,71 @@
 #include <dt-bindings/zmk/keys.h>
 
 / {
-    keymap {
-        compatible = "zmk,keymap";
+  keymap {
+    compatible = "zmk,keymap";
 
-        /* ===== Layer 0 (Default) ===== */
-        default_layer {
-            bindings = <
-                /* Row 0 (15) */
-                &kp ESC    &kp N1     &kp N2     &kp N3     &kp N4
-                &kp N5     &kp N6     &kp N7     &kp N8     &kp N9
-                &kp N0     &kp MINUS  &kp EQUAL  &kp BSPC   &kp DEL
+    /* =======================
+     * Layer 0: Base
+     * ======================= */
+    base_layer {
+      bindings = <
+        /* Row 0 (15): Esc, 1-0, -, =, Backspace, Del */
+        &kp ESC   &kp N1    &kp N2    &kp N3    &kp N4
+        &kp N5    &kp N6    &kp N7    &kp N8    &kp N9
+        &kp N0    &kp MINUS &kp EQUAL &kp BSPC  &kp DEL
 
-                /* Row 1 (15) */
-                &kp TAB    &kp Q      &kp W      &kp E      &kp R
-                &kp T      &kp Y      &kp U      &kp I      &kp O
-                &kp P      &kp LBKT   &kp RBKT   &kp BSLH   &kp GRAVE
+        /* Row 1 (15): Tab, Q-P, [ ], \, ` (tilde key at far right) */
+        &kp TAB   &kp Q     &kp W     &kp E     &kp R
+        &kp T     &kp Y     &kp U     &kp I     &kp O
+        &kp P     &kp LBKT  &kp RBKT  &kp BSLH  &kp GRAVE
 
-                /* Row 2 (15) */
-                &kp CAPS   &kp A      &kp S      &kp D      &kp F
-                &kp G      &kp H      &kp J      &kp K      &kp L
-                &kp SEMI   &kp SQT    &kp ENTER  &none      &kp PG_UP
+        /* Row 2 (15): Caps, A-L, ;, ', Enter, (gap), PgUp */
+        &kp CAPS  &kp A     &kp S     &kp D     &kp F
+        &kp G     &kp H     &kp J     &kp K     &kp L
+        &kp SEMI  &kp SQT   &kp ENTER &none     &kp PG_UP
 
-                /* Row 3 (15) */
-                &kp LSHFT  &kp Z      &kp X      &kp C      &kp V
-                &kp B      &kp N      &kp M      &kp COMMA  &kp DOT
-                &kp FSLH   &kp RSHFT  &kp UP     &none      &kp PG_DN
+        /* Row 3 (15): Shift, Z-/ , Right Shift, Up, (gap), PgDn */
+        &kp LSHFT &kp Z     &kp X     &kp C     &kp V
+        &kp B     &kp N     &kp M     &kp COMMA &kp DOT
+        &kp SLASH &kp RSHFT &kp UP    &none     &kp PG_DN
 
-                /* Row 4 (15) */
-                &kp LCTRL  &kp LGUI   &kp LALT   &kp SPACE  &none
-                &none      &none      &kp RALT   &mo 1      &kp RCTRL
-                &kp LEFT   &kp DOWN   &kp RIGHT  &none      &none
-            >;
-        };
-
-        /* ===== Layer 1 (Fn) ===== */
-        fn_layer {
-            bindings = <
-                /* Row 0 (15): F keys */
-                &kp ESC   &kp F1    &kp F2    &kp F3    &kp F4
-                &kp F5    &kp F6    &kp F7    &kp F8    &kp F9
-                &kp F10   &kp F11   &kp F12   &kp DEL   &trans
-
-                /* Row 1 (15) */
-                &trans &trans &trans &trans &trans
-                &trans &trans &trans &trans &trans
-                &trans &trans &trans &trans &trans
-
-                /* Row 2 (15) */
-                &trans &trans &trans &trans &trans
-                &trans &trans &trans &trans &trans
-                &trans &trans &trans &trans &trans
-
-                /* Row 3 (15) */
-                &trans &trans &trans &trans &trans
-                &trans &trans &trans &trans &trans
-                &trans &trans &trans &trans &trans
-
-                /* Row 4 (15) */
-                &trans &trans &trans &trans &trans
-                &trans &trans &trans &trans &trans
-                &trans &trans &trans &trans &trans
-            >;
-        };
+        /* Row 4 (15): Ctrl, Win, Alt, Space, (gap x2), Alt, Fn, Ctrl, Left, Down, Right, (gap x2) */
+        &kp LCTRL &kp LGUI  &kp LALT  &kp SPACE &none
+        &none     &none     &kp RALT  &mo 1     &kp RCTRL
+        &kp LEFT  &kp DOWN  &kp RIGHT &none     &none
+      >;
     };
+
+    /* =======================
+     * Layer 1: Fn
+     * ======================= */
+    fn_layer {
+      bindings = <
+        /* Row 0: F1-F12 on the number row positions */
+        &kp ESC   &kp F1    &kp F2    &kp F3    &kp F4
+        &kp F5    &kp F6    &kp F7    &kp F8    &kp F9
+        &kp F10   &kp F11   &kp F12   &kp DEL   &trans
+
+        /* Row 1: navigation/media-ish helpers (you can change later) */
+        &trans    &trans    &trans    &trans    &trans
+        &trans    &trans    &trans    &trans    &trans
+        &trans    &trans    &trans    &trans    &trans
+
+        /* Row 2 */
+        &trans    &trans    &trans    &trans    &trans
+        &trans    &trans    &trans    &trans    &trans
+        &trans    &trans    &trans    &none     &trans
+
+        /* Row 3 */
+        &trans    &trans    &trans    &trans    &trans
+        &trans    &trans    &trans    &trans    &trans
+        &trans    &trans    &trans    &none     &trans
+
+        /* Row 4: keep arrows working; keep Fn as transparent so &mo 1 still works */
+        &trans    &trans    &trans    &trans    &none
+        &none     &none     &trans    &trans    &trans
+        &trans    &trans    &trans    &none     &none
+      >;
+    };
+  };
 };
