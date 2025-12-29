@@ -6,16 +6,19 @@
     zmk,matrix_transform = &mt;
   };
 
-  kscan0: kscan0 {
+  kscan0: kscan {
     compatible = "zmk,kscan-gpio-matrix";
 
     debounce-press-ms = <5>;
     debounce-release-ms = <5>;
 
-    /* Your diodes: stripe (cathode) is on the ROW bus side -> scan must be row2col */
-    diode-direction = "row2col";
+    /*
+     * KEEP THIS CONSISTENT WITH YOUR CURRENT WORKING STATE.
+     * If most keys currently scan (even if mapped wrong), do NOT flip this.
+     */
+    diode-direction = "col2row";
 
-    /* ROWS (your horizontal bare wire bus) */
+    /* ROWS (your horizontal row buses) */
     row-gpios = <
       &gpio0 6  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)  /* R0 */
       &gpio0 8  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)  /* R1 */
@@ -24,7 +27,14 @@
       &gpio0 22 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)  /* R4 */
     >;
 
-    /* COLUMNS (your vertical blue wires) — matches your pin notes */
+    /*
+     * COLUMNS (your vertical blue wires) — matches your pin notes:
+     * C0..C11 on the main header, then C12..C14 on the bottom pads.
+     *
+     * IMPORTANT:
+     * - You said you did NOT use P0.09
+     * - You DID use P0.10 (and you have CONFIG_NFCT_PINS_AS_GPIOS=y in ja68.conf)
+     */
     col-gpios = <
       &gpio0 24 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)  /* C0  */
       &gpio1 0  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)  /* C1  */
@@ -52,25 +62,41 @@
     columns = <15>;
 
     /*
-     * Fixes included:
-     *  - Swap col 12 <-> 13 across ALL rows (your wiring diagram shows that shift)
-     *  - Swap bottom-row physical SPACE position (r4,c3) with (r4,c7)
+     * Row 0-3 are normal (identity).
+     *
+     * Row 4 FIX (this is the important part):
+     * Your wiring diagram shows bottom row keys exist at:
+     *   C0 C1 C2  (then a gap)  C6 (SPACE)  (gap)  C9 C10 C11 C12 C13 C14
+     *
+     * But your keymap has them packed like:
+     *   C0 C1 C2 C3(space) C7(Alt) C8(Fn) C9(Ctrl) C10(←) C11(↓) C12(→)
+     *
+     * So we remap the transformed bottom-row positions to the REAL electrical columns:
+     *   keymap col3 -> electrical col6  (space)
+     *   keymap col7 -> electrical col9  (Alt)
+     *   keymap col8 -> electrical col10 (Fn)
+     *   keymap col9 -> electrical col11 (Ctrl)
+     *   keymap col10-> electrical col12 (Left)
+     *   keymap col11-> electrical col13 (Down)
+     *   keymap col12-> electrical col14 (Right)
+     *
+     * Empty keymap slots map to the unused electrical columns to keep everything consistent.
      */
     map = <
       /* Row 0 */
-      RC(0,0)  RC(0,1)  RC(0,2)  RC(0,3)  RC(0,4)  RC(0,5)  RC(0,6)  RC(0,7)  RC(0,8)  RC(0,9)  RC(0,10) RC(0,11) RC(0,13) RC(0,12) RC(0,14)
+      RC(0,0)  RC(0,1)  RC(0,2)  RC(0,3)  RC(0,4)  RC(0,5)  RC(0,6)  RC(0,7)  RC(0,8)  RC(0,9)  RC(0,10) RC(0,11) RC(0,12) RC(0,13) RC(0,14)
 
       /* Row 1 */
-      RC(1,0)  RC(1,1)  RC(1,2)  RC(1,3)  RC(1,4)  RC(1,5)  RC(1,6)  RC(1,7)  RC(1,8)  RC(1,9)  RC(1,10) RC(1,11) RC(1,13) RC(1,12) RC(1,14)
+      RC(1,0)  RC(1,1)  RC(1,2)  RC(1,3)  RC(1,4)  RC(1,5)  RC(1,6)  RC(1,7)  RC(1,8)  RC(1,9)  RC(1,10) RC(1,11) RC(1,12) RC(1,13) RC(1,14)
 
       /* Row 2 */
-      RC(2,0)  RC(2,1)  RC(2,2)  RC(2,3)  RC(2,4)  RC(2,5)  RC(2,6)  RC(2,7)  RC(2,8)  RC(2,9)  RC(2,10) RC(2,11) RC(2,13) RC(2,12) RC(2,14)
+      RC(2,0)  RC(2,1)  RC(2,2)  RC(2,3)  RC(2,4)  RC(2,5)  RC(2,6)  RC(2,7)  RC(2,8)  RC(2,9)  RC(2,10) RC(2,11) RC(2,12) RC(2,13) RC(2,14)
 
       /* Row 3 */
-      RC(3,0)  RC(3,1)  RC(3,2)  RC(3,3)  RC(3,4)  RC(3,5)  RC(3,6)  RC(3,7)  RC(3,8)  RC(3,9)  RC(3,10) RC(3,11) RC(3,13) RC(3,12) RC(3,14)
+      RC(3,0)  RC(3,1)  RC(3,2)  RC(3,3)  RC(3,4)  RC(3,5)  RC(3,6)  RC(3,7)  RC(3,8)  RC(3,9)  RC(3,10) RC(3,11) RC(3,12) RC(3,13) RC(3,14)
 
-      /* Row 4 (bottom row): swap physical positions c3 <-> c7 so SPACE lands on the real wired column */
-      RC(4,0)  RC(4,1)  RC(4,2)  RC(4,7)  RC(4,4)  RC(4,5)  RC(4,6)  RC(4,3)  RC(4,8)  RC(4,9)  RC(4,10) RC(4,11) RC(4,13) RC(4,12) RC(4,14)
+      /* Row 4 (FIXED to match your wiring diagram) */
+      RC(4,0)  RC(4,1)  RC(4,2)  RC(4,6)  RC(4,3)  RC(4,4)  RC(4,5)  RC(4,9)  RC(4,10) RC(4,11) RC(4,12) RC(4,13) RC(4,14) RC(4,7)  RC(4,8)
     >;
   };
 };
