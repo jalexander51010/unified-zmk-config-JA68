@@ -1,0 +1,6 @@
+if SHIELD_JANUM17
+
+config ZMK_KEYBOARD_NAME
+    default "JAnum17"
+
+endif # SHIELD_JAnum17
