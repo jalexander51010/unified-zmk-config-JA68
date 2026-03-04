@@ -8,27 +8,47 @@
 #EDIT EDIT EDIT MUST EDIT
 
 / {
-    keymap {
-        compatible = "zmk,keymap";
+  keymap {
+    compatible = "zmk,keymap";
 
-        default_layer {
-            bindings = <
-    &kp ESC   &kp N1    &kp N2   &kp N3   &kp N4   &kp N5   &kp N6   &kp N7    &kp N8    &kp N9    &kp N0   &kp MINUS &kp EQUAL &kp BSPC  &kp DEL
-    &kp TAB   &kp Q     &kp W    &kp E    &kp R    &kp T    &kp Y    &kp U     &kp I     &kp O     &kp P    &kp LBKT  &kp RBKT  &kp BSLH  &kp PG_UP
-    &kp CLCK  &kp A     &kp S    &kp D    &kp F    &kp G    &kp H    &kp J     &kp K     &kp L     &kp SEMI &kp SQT             &kp RET   &kp PG_DN
-    &kp LSHFT &kp Z     &kp X    &kp C    &kp V    &kp B    &kp N    &kp M     &kp COMMA &kp DOT   &kp FSLH           &kp RSHFT &kp UP    &kp END
-    &kp LCTRL &kp LGUI  &kp LALT                   &kp SPACE                   &kp RALT  &mo 1     &kp RCTRL &kp LEFT  &kp DOWN  &kp RIGHT
-            >;
-        };
+    /* Layer 0: Normal numpad */
+    default_layer {
+      bindings = <
+        /* Row 0 */
+        &lt 1 &kp KP_NUMLOCK   &kp KP_DIVIDE   &kp KP_MULTIPLY   &kp KP_MINUS
 
-        function_layer {
-            bindings = <
-    &kp GRAVE &kp F1    &kp F2   &kp F3   &kp F4   &kp F5   &kp F6   &kp F7    &kp F8    &kp F9    &kp F10  &kp F11   &kp F12   &trans    &bt BT_CLR
-    &trans    &trans    &trans   &trans   &trans   &trans   &trans   &trans    &trans    &trans    &trans   &trans    &trans    &trans    &trans
-    &trans    &trans    &trans   &trans   &trans   &trans   &trans   &trans    &trans    &trans    &trans   &trans              &trans    &trans
-    &trans    &trans    &trans   &trans   &trans   &trans   &trans   &trans    &trans    &trans    &trans             &trans    &trans    &trans
-    &trans    &trans    &trans                     &trans                      &trans    &trans    &trans    &trans    &trans    &trans
-            >;
-        };
+        /* Row 1 */
+        &kp KP_7              &kp KP_8        &kp KP_9          &kp KP_PLUS
+
+        /* Row 2  (+ is 2u; this cell is empty) */
+        &kp KP_4              &kp KP_5        &kp KP_6          &none
+
+        /* Row 3 */
+        &kp KP_1              &kp KP_2        &kp KP_3          &kp KP_ENTER
+
+        /* Row 4  (0 is 2u; Enter is 2u; extra cells empty) */
+        &kp KP_0              &none           &kp KP_DOT        &none
+      >;
     };
+
+    /* Layer 1: Fn (hold NumLock) */
+    fn_layer {
+      bindings = <
+        /* Row 0: / * - */
+        &trans               &sys_reset        &bootloader       &kp C_VOLUME_DOWN
+
+        /* Row 1: 7 8 9 + */
+        &kp C_PREV           &kp C_PLAY_PAUSE  &kp C_NEXT        &kp C_VOLUME_UP
+
+        /* Row 2: 4 5 6 (empty) */
+        &bt BT_SEL 3         &bt BT_SEL 4      &bt BT_NXT        &none
+
+        /* Row 3: 1 2 3 Enter */
+        &bt BT_SEL 0         &bt BT_SEL 1      &bt BT_SEL 2      &none
+
+        /* Row 4: 0 (empty) . (empty) */
+        &kp C_MUTE           &none             &bt BT_CLR        &kp C_PLAY_PAUSE
+      >;
+    };
+  };
 };
