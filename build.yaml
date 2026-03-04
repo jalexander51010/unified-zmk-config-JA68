@@ -1,3 +1,6 @@
 include:
   - board: nice_nano_v2
     shield: ja68
+
+  - board: nice_nano_v2
+    shield: JAnum17
