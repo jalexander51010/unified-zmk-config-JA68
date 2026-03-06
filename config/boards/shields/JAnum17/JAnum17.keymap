@@ -3,7 +3,7 @@
 #include <dt-bindings/zmk/bt.h>
 
 / {
-  keymap {&kp KP_PLUS
+  keymap {
     compatible = "zmk,keymap";
 
     default_layer {
